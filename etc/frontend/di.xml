@@ -35,4 +35,8 @@
                 sortOrder="10" />
     </type>
 
+    <type name="Magento\Framework\App\View">
+        <plugin name="add_search_results_tracking" type="Chessio\Matomo\Plugin\Magento\Framework\App\View\AddSearchResultTracking" sortOrder="10"/>
+    </type>
+
 </config>
