@@ -6,7 +6,7 @@ namespace Chessio\Matomo\Plugin\Magento\Framework\App\View;
 
 class AddSearchResultTracking
 {
-    public const string SEARCH_RESULT_PAGE_FULL_ACTION_NAME = 'catalogsearch_result_index';
+    public const SEARCH_RESULT_PAGE_FULL_ACTION_NAME = 'catalogsearch_result_index';
     
     public function __construct(
         protected \Chessio\Matomo\Model\Tracker $matomoTracker,
