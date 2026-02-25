@@ -35,6 +35,7 @@
                 <php_script_path>matomo.php</php_script_path>
                 <js_script_path>matomo.js</js_script_path>
                 <cdn_hostname></cdn_hostname>
+                <js_script_path_sync_init>0</js_script_path_sync_init>
             </tracking>
         </piwik>
     </default>
