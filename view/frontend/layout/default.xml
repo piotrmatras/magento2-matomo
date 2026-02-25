@@ -23,6 +23,14 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceBlock name="head.additional">
+            <block class="Chessio\Matomo\Block\Matomo"
+                   name="matomo.script"
+                   template="Chessio_Matomo::tracker-script.phtml"
+                   ifconfig="piwik/tracking/js_script_path_sync_init"
+                   before="-" />
+        </referenceBlock>
+
         <referenceContainer name="after.body.start">
             <block class="Chessio\Matomo\Block\Matomo"
                    name="matomo.tracker"

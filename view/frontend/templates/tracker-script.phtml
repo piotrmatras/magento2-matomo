@@ -1,0 +1,15 @@
+<?php
+/**
+ * Initializes the Matomo tracker by setting the tracker URL and site ID, then loading the tracker script synchronously.
+ *
+ * @var \Chessio\Matomo\Block\Matomo $block
+ */
+?>
+<script type="text/javascript">
+    (function (w, d) {
+        w._paq = w._paq || [];
+        w._paq.push(['setTrackerUrl', '<?= $block->escapeJsQuote($block->getTrackerUrl()); ?>']);
+        w._paq.push(['setSiteId', <?= (int) $block->getSiteId(); ?>]);
+    })(window, document);
+</script>
+<script type="text/javascript" src="<?= $block->escapeJsQuote($block->getScriptUrl()); ?>"></script>

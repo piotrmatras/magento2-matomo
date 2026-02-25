@@ -34,20 +34,24 @@
 // However that might cause the tracker script to miss the `DOMContentLoaded'
 // event which breaks the link tracking feature.
 ?>
-<script type="text/javascript">
-(function (w, d) {
-    w._paq = w._paq || [];
-    w._paq.push(['setTrackerUrl', '<?= $block->escapeJsQuote($block->getTrackerUrl()); ?>']);
-    w._paq.push(['setSiteId', <?= (int) $block->getSiteId(); ?>]);
-    var g = d.createElement('script'),
-        s = d.getElementsByTagName('script')[0];
-    g.type = 'text/javascript';
-    g.async = true;
-    g.defer = true;
-    g.src = '<?= $block->escapeJsQuote($block->getScriptUrl()); ?>';
-    s.parentNode.insertBefore(g, s);
-})(window, document);
-</script>
+
+<?php if (!$block->getJsScriptSyncInit()): ?>
+    <script type="text/javascript">
+        (function (w, d) {
+            w._paq = w._paq || [];
+            w._paq.push(['setTrackerUrl', '<?= $block->escapeJsQuote($block->getTrackerUrl()); ?>']);
+            w._paq.push(['setSiteId', <?= (int) $block->getSiteId(); ?>]);
+            var g = d.createElement('script'),
+                s = d.getElementsByTagName('script')[0];
+            g.type = 'text/javascript';
+            g.async = true;
+            g.defer = true;
+            g.src = '<?= $block->escapeJsQuote($block->getScriptUrl()); ?>';
+            s.parentNode.insertBefore(g, s);
+        })(window, document);
+    </script>
+<?php endif; ?>
+
 <?php
 // The following script is a workaround that prevents the checkout loader
 // overlay from spinning indefinitely in cases where a browser plugin such as

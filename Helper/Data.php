@@ -43,6 +43,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_LINK_ENABLED = 'piwik/tracking/link_enabled';
     const XML_PATH_LINK_DELAY = 'piwik/tracking/link_delay';
     const XML_PATH_UID_PROVIDER = 'piwik/tracking/uid_provider';
+    const XML_PATH_JS_SCRIPT_SYNC_INIT = 'piwik/tracking/js_script_path_sync_init';
+
 
     /**
      * Check if Matomo is enabled
@@ -250,5 +252,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getJsScriptSyncInit()
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_JS_SCRIPT_SYNC_INIT);
     }
 }

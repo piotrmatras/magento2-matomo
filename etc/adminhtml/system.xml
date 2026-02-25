@@ -169,6 +169,18 @@
                         <config_path>piwik/tracking/cdn_hostname</config_path>
                         <comment>Hostname for serving the Matomo tracker Javascript. May be left empty in which case the regular hostname will be used.</comment>
                     </field>
+                    <field id="js_script_path_sync_init"
+                           translate="label comment"
+                           type="select"
+                           sortOrder="35"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1">
+                        <label>Load matomo tracker file synchronously</label>
+                        <config_path>piwik/tracking/js_script_path_sync_init</config_path>
+                        <comment>Recommended to enable when using A/B tests to prevent flickering issues.</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
                 </group>
             </group>
         </section>
