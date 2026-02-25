@@ -166,6 +166,14 @@ class Matomo extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @return boolean
+     */
+    public function getJsScriptSyncInit()
+    {
+        return $this->_dataHelper->getJsScriptSyncInit();
+    }
+
+    /**
      * Encode data to a JSON string
      *
      * @param mixed $data
