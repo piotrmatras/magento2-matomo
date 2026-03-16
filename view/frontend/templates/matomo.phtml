@@ -18,15 +18,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Chessio_Matomo.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 ?>
-<?php /** @var \Chessio\Matomo\Block\Matomo $block */ ?>
+<?php
+/**
+ * @var \Chessio\Matomo\Block\Matomo $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
 <script type="text/x-magento-init">
 <?= $block->jsonEncode([
-    '*' => [
-        'Chessio_Matomo/js/tracker' => $block->getJsOptions()
-    ]
-]); ?>
+        '*' => [
+            'Chessio_Matomo/js/tracker' => $block->getJsOptions()
+        ]
+    ]); ?>
 </script>
 <?php
 // The following script can be omitted in which case the
@@ -34,22 +39,23 @@
 // However that might cause the tracker script to miss the `DOMContentLoaded'
 // event which breaks the link tracking feature.
 ?>
-
 <?php if (!$block->getJsScriptSyncInit()): ?>
-    <script type="text/javascript">
+    <?php
+    $scriptString = "
         (function (w, d) {
             w._paq = w._paq || [];
-            w._paq.push(['setTrackerUrl', '<?= $block->escapeJsQuote($block->getTrackerUrl()); ?>']);
-            w._paq.push(['setSiteId', <?= (int) $block->getSiteId(); ?>]);
+            w._paq.push(['setTrackerUrl', '{$block->escapeJsQuote($block->getTrackerUrl())}']);
+            w._paq.push(['setSiteId', " . (int)$block->getSiteId() . "]);
             var g = d.createElement('script'),
                 s = d.getElementsByTagName('script')[0];
             g.type = 'text/javascript';
             g.async = true;
             g.defer = true;
-            g.src = '<?= $block->escapeJsQuote($block->getScriptUrl()); ?>';
+            g.src = '{$block->escapeJsQuote($block->getScriptUrl())}';
             s.parentNode.insertBefore(g, s);
-        })(window, document);
-    </script>
+        })(window, document);";
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $scriptString, false) ?>
 <?php endif; ?>
 
 <?php
@@ -60,38 +66,33 @@
 // export a mocked version of the component if we get an `errback' from require.
 // @see vendor/magento/module-checkout/view/frontend/web/js/checkout-loader.js
 // @see lib/web/mage/requirejs/resolver.js
-?>
-<script type="text/javascript">
-(function (require, undefined) {
+$loaderWorkaround = "
+(function (require) {
     'use strict';
     var moduleName = 'Chessio_Matomo/js/tracker';
-    (require !== undefined) && require([moduleName], undefined, function (e) {
-        if (e.requireType === 'scripterror'
-            && (e.requireModules && e.requireModules[0]) === moduleName
-        ) {
-            require.undef(moduleName);
-            define(moduleName, function () {
-                var noop = function () { /* NoOp */ };
-                var error = function () {
-                    throw new Error('Failed to load Matomo module');
-                };
-                var mock = {
-                    createTracker: error,
-                    getMatomo: error,
-                    getTracker: error,
-                    push: noop
-                };
-                mock[moduleName] = noop;
-                return mock;
-            });
-        }
-    });
-})(require);
-</script>
+    if (typeof require !== 'undefined') {
+        require([moduleName], function() {}, function (e) {
+            if (e.requireType === 'scripterror' && (e.requireModules && e.requireModules[0]) === moduleName) {
+                require.undef(moduleName);
+                define(moduleName, function () {
+                    var noop = function () { };
+                    var error = function () { throw new Error('Failed to load Matomo module'); };
+                    return {
+                        createTracker: error,
+                        getMatomo: error,
+                        getTracker: error,
+                        push: noop
+                    };
+                });
+            }
+        });
+    }
+})(require);";
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $loaderWorkaround, false) ?>
 <noscript>
     <p>
-        <img src="<?= $block->getTrackingPixelUrl(); ?>"
-             style="border: 0;"
-             alt="" />
+        <img src="<?= $escaper->escapeUrl($block->getTrackingPixelUrl()); ?>" alt="" />
+        <?= /* @noEscape */ $secureRenderer->renderTag('style', [], 'img { border: 0; }', false) ?>
     </p>
 </noscript>
