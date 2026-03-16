@@ -16,13 +16,13 @@ $initScript = <<<JS
 })(window, document);
 JS;
 ?>
-<?= /** @noEscape */ $secureRenderer->renderTag(
+<?= /* @noEscape */ $secureRenderer->renderTag(
     'script',
     ['type' => 'text/javascript'],
     $initScript,
     false
 ); ?>
-<?= /** @noEscape */ $secureRenderer->renderTag(
+<?= /* @noEscape */ $secureRenderer->renderTag(
     'script',
     ['type' => 'text/javascript', 'src' => $escaper->escapeUrl($block->getScriptUrl())],
     '',

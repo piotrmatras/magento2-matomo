@@ -28,10 +28,10 @@
 ?>
 <script type="text/x-magento-init">
 <?= $block->jsonEncode([
-        '*' => [
-            'Chessio_Matomo/js/tracker' => $block->getJsOptions()
-        ]
-    ]); ?>
+    '*' => [
+        'Chessio_Matomo/js/tracker' => $block->getJsOptions()
+    ]
+]); ?>
 </script>
 <?php
 // The following script can be omitted in which case the
@@ -66,7 +66,7 @@
 // export a mocked version of the component if we get an `errback' from require.
 // @see vendor/magento/module-checkout/view/frontend/web/js/checkout-loader.js
 // @see lib/web/mage/requirejs/resolver.js
-$loaderWorkaround = "
+$loaderScript = "
 (function (require) {
     'use strict';
     var moduleName = 'Chessio_Matomo/js/tracker';
@@ -89,7 +89,7 @@ $loaderWorkaround = "
     }
 })(require);";
 ?>
-<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $loaderWorkaround, false) ?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $loaderScript, false) ?>
 <noscript>
     <p>
         <img src="<?= $escaper->escapeUrl($block->getTrackingPixelUrl()); ?>" alt="" />
