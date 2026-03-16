@@ -3,13 +3,29 @@
  * Initializes the Matomo tracker by setting the tracker URL and site ID, then loading the tracker script synchronously.
  *
  * @var \Chessio\Matomo\Block\Matomo $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
-<script type="text/javascript">
-    (function (w, d) {
-        w._paq = w._paq || [];
-        w._paq.push(['setTrackerUrl', '<?= $block->escapeJsQuote($block->getTrackerUrl()); ?>']);
-        w._paq.push(['setSiteId', <?= (int) $block->getSiteId(); ?>]);
-    })(window, document);
-</script>
-<script type="text/javascript" src="<?= $block->escapeJsQuote($block->getScriptUrl()); ?>"></script>
+<?php
+$initScript = <<<JS
+(function (w, d) {
+    w._paq = w._paq || [];
+    w._paq.push(['setTrackerUrl', '{$escaper->escapeJs($block->getTrackerUrl())}']);
+    w._paq.push(['setSiteId', {$block->getSiteId()}]);
+})(window, document);
+JS;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag(
+    'script',
+    ['type' => 'text/javascript'],
+    $initScript,
+    false
+); ?>
+<?= /* @noEscape */ $secureRenderer->renderTag(
+    'script',
+    ['type' => 'text/javascript', 'src' => $escaper->escapeUrl($block->getScriptUrl())],
+    '',
+    false
+); ?>
+
